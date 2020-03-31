@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/lib/favicon.ico}" type="image/x-icon" />
+
+    <title>${Organization}</title>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap3/css/bootstrap.css}">
+<!--    <link rel="stylesheet" th:href="@{/lib/assets/css/font-awesome.css}">-->
+    <link rel="stylesheet" th:href="@{/lib/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/lib/css/amazeui.css}">
+    <script th:src="@{/lib/jquery/jquery-3.4.1.js}"></script>
+    <script th:src="@{/lib/js/amazeui.js}"></script>
+    <script th:src="@{/lib/jquery/jquery.md5.js}"></script>
+    <script th:src="@{/lib/jquery/jquery.cookie.min.js}"></script>
+<!--    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>-->
+
+<!--    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+
+    <style>
+        .leftContent {
+            margin-top: 30px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).keyup(function(event){
+            if(event.keyCode === 13){
+                $("#login").trigger("click");
+            }
+        });
+
+        function hideInfo() {
+            $('.alert-dismissible').hide();
+        }
+
+        function checkLogin(){
+            $("#loginWarning").hide();
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+            //var navigateIndex = "standardCase";
+            var navigateIndex = "";
+            //创建cookie
+            addCookie("navigatemode",navigateIndex, 90);
+            var infoObj = document.getElementById("info");
+            var bRtn = true;
+            if(username==null || username === ""){
+                infoObj.innerHTML = '用户名不能为空';
+                bRtn = false;
+                $('#loginWarning').show();
+                $('#username').focus();
+                // infoObj.setDisplayed()
+            } else if(password==null || password===""){
+                infoObj.innerHTML = '密码不能为空';
+                bRtn = false;
+                $('#loginWarning').show();
+                $('#password').focus();
+            } else {
+                var remember = $("#remember").get(0).checked;
+                Cookies.set('login_username', username, { expires: 90});
+                Cookies.set('login_remember', remember, { expires: 90});
+                if(remember){
+                    Cookies.set('login_username', username, { expires: 90});
+                    Cookies.set('login_password', password, { expires: 90});
+                }
+                else{
+                    Cookies.set('login_username', "", { expires: 90});
+                    Cookies.set('login_password', "", { expires: 90});
+                }
+                $('#login').attr("disabled", "disabled");
+                $.ajax({
+                    type:"post",
+                    // url:"hospital/${url}/controller/login/ajaxLogin",
+                    url:"/login/ajaxLogin",
+                    data:{"username": username, password:$.md5(password)},
+                    dataType:"json",
+                    timeout:10000,
+                    // error:function(textStatus){
+                    //     debugger;
+                    //     $('#login').removeAttr("disabled");
+                    //     debugger;
+                    //     if(textStatus.statusText === "timeout"){
+                    //         $('#loginWarning').show();
+                    //         $('#info').html("请检查网络连接");
+                    //     }
+                    // },
+                    success:function(data){
+                        $('#login').removeAttr("disabled");
+                        // if(data.success) {
+                        if(data) {
+                            // var url = <span th:text="${url}"> </span> ;
+                            // location.href='hospital/' + '<span th:text="${url}"></span>' + '/apps/costaccounting/main';       //TODO PROBLEM
+                            // location.href='hospital/beijing/beidayixin/main';       //TODO PROBLEM
+                            location.href='hospital/beijing/beidayixin/index';       //TODO PROBLEM
+                        } else {
+                            $('#loginWarning').show();
+                            $('#info').html(data.msg);
+                        }
+                    }
+                });
+            }
+            return bRtn;
+        }
+
+        // 添加cookie
+        function addCookie(objName,objValue,objDays) {
+            var str = objName + "=" + escape(objValue);
+
+            if(objDays > 0) {   //为0时不设定过期时间，浏览器关闭时cookie自动消失
+                var date = new Date();
+                var ms = objDays*3600*1000*24;
+                date.setTime(date.getTime() + ms);
+                str += "; expires=" + date.toGMTString();
+            }
+            document.cookie = str;
+        }
+
+        //读取cookies
+        function getCookie(name) {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+
+            if(arr === document.cookie.match(reg)){
+                return unescape(arr[2]);
+            } else {
+                return null;
+            }
+        }
+
+        //判断是否为Chrome浏览器
+        $(document).ready(function(){
+            if(getBroswer() != "Chrome"){
+                $("#ChromeWarning").slideDown(500, "swing");
+            }
+        });
+        function getBroswer() {
+            var userAgent = navigator.userAgent;
+            if (userAgent.indexOf("Firefox") > -1) {
+                return "Firefox";
+            } else if (userAgent.indexOf("Edge") > -1) {
+                return "Edge";
+            } else if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) {
+                return "Opera";
+            } else if (userAgent.indexOf("Chrome") > -1) {
+                return "Chrome";
+            } else if (userAgent.indexOf("Safari") > -1) {
+                return "Safari";
+            } else if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) {
+                return "IE";
+            }
+        }
+        function warningClose(){
+            $("#ChromeWarning").css('display',"none");
+        }
+    </script>
+</head>
+<body>
+<div id="ChromeWarning" class="alert alert-warning alert-dismissible" role="alert" style="top:0;left:0;right:0;text-align:center;display:none;position:fixed;z-index:999">
+    <button id="ChromeWaringClose" type="button" onclick="warningClose()" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    为了便于正常访问系统，建议您使用<a href="https://www.google.cn/chrome/" target="_blank" class="alert-link">Chrome浏览器</a>
+</div>
+    <div style="position:fixed; float:left; width: 50%;">
+        <canvas style="background-color: #1a95e1" id="canvas"></canvas>
+        <div style="position: absolute; left: 20%; top: 30%; color: white; font-size: 20px;">
+            <div class="row leftContent">
+                <span><i class="fa fa-handshake-o"></i>&nbsp;友好便捷</span>
+            </div>
+            <div class="row leftContent">
+                <span>&nbsp;<i class="fa fa-shield"></i>&nbsp;&nbsp;安全稳定</span>
+            </div>
+            <div class="row leftContent">
+                <span>&nbsp;<i class="fa fa-bolt"></i>&nbsp;&nbsp;&nbsp;科学高效</span>
+            </div>
+        </div>
+        <script type="application/javascript">
+            var c=document.getElementById("canvas");
+            var ctx=c.getContext("2d");
+            c.width = document.body.clientWidth / 2;
+            c.height = document.documentElement.clientHeight - 50;
+            ctx.save();
+            ctx.beginPath();
+            ctx.lineWidth=100;
+            ctx.strokeStyle = "#0b76cc";
+            ctx.moveTo(c.width / 2, c.height / 2);
+            ctx.quadraticCurveTo(c.width / 2, -50, 1.1 * c.width, 20);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            ctx.strokeStyle = '#0b76cc';
+            ctx.lineWidth=100;
+            ctx.beginPath();
+            ctx.moveTo(c.width / 2, c.height / 2);
+            ctx.lineTo(c.width / 2 - 15, c.height);
+            ctx.stroke();
+            ctx.moveTo(c.width / 2 + 15, c.height / 2);
+            ctx.lineTo(c.width, c.height / 2 + 5);
+            ctx.stroke();
+            ctx.restore();
+
+        </script>
+    </div>
+    <div style="position: fixed; float: right; right: 80px; margin-top: 200px; width: 400px">
+        <form class="form-horizontal">
+            <div class="form-group" style="text-align: center">
+                <div class="col-md-9 am-animation-slide-top">
+                    <h3><b>公立医院绩效考核内控管理系统V1.0</b></h3>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-9">
+                    <div class="input-group am-animation-slide am-animation-slide-top log-animation-delay">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" id="username" name="username" placeholder="用户名"
+                               class="form-control" aria-describedby="inputGroupSuccess2Status">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-9">
+                    <div class="input-group am-animation-slide-left log-animation-delay">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" id="password" placeholder="密码" name="password" class="form-control" aria-describedby="inputGroupSuccess2Status">
+                    </div>
+                </div>
+            </div>
+            <div id="loginWarning" class="alert alert-warning alert-dismissible col-md-9" role="alert" hidden>
+                <button type="button" onclick="hideInfo();" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span id="info" style="font-size: 11px;"></span>
+            </div>
+            <div class="form-group">
+                <div class="col-md-9">
+                    <div class="checkbox am-animation-slide-right">
+                        <label>
+                            <input type="checkbox" id="remember" name="remember"> 记住密码
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-9">
+                    <button type="button" id="login"
+                            class="btn btn-primary btn-md btn-block am-animation-slide-bottom" style="border-radius: 15px;" onclick="checkLogin();">登录</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer class="navbar-fixed-bottom" style="height: 50px">
+       <div class="row" style="text-align: center;line-height: 50px; color: #00F7DE">
+           版权信息 Copyright © 2019 北大医疗信息技术有限公司 All Rights Reserved
+       </div>
+     </footer>
+</body>
+</html>

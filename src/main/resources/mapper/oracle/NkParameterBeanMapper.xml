@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.oracle.NkParameterBeanMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.model.oracle.NkParameterBean">
+    <id column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="CLASS_A" jdbcType="VARCHAR" property="classA" />
+    <result column="CLASS_B" jdbcType="VARCHAR" property="classB" />
+    <result column="CALC_TYPE" jdbcType="VARCHAR" property="calcType" />
+    <result column="NATURE" jdbcType="VARCHAR" property="nature" />
+    <result column="SIGNIFICANCE" jdbcType="VARCHAR" property="significance" />
+    <result column="IMPROVE" jdbcType="VARCHAR" property="improve" />
+    <result column="NK_FROM" jdbcType="VARCHAR" property="nkFrom" />
+    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+    <result column="UPDATETIME" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="ISAVAILABLE" jdbcType="NUMERIC" property="isavailable" />
+    <result column="THRESHOLD_HOSPITAL" jdbcType="NUMERIC" property="thresholdHospital" />
+    <result column="THRESHOLD_COUNTRY" jdbcType="NUMERIC" property="thresholdCountry" />
+    <result column="INDICATOR_ORDER" jdbcType="NUMERIC" property="indicatorOrder" />
+    <result column="INDICATORS_GUIDE" jdbcType="NUMERIC" property="indicatorsGuide" />
+    <result column="NK_LEVEL" jdbcType="NUMERIC" property="nkLevel" />
+    <result column="DATASOURCE" jdbcType="NUMERIC" property="datasource" />
+    <result column="EDITABLE" jdbcType="NUMERIC" property="editable" />
+    <result column="FORMULA" jdbcType="VARCHAR" property="formula" />
+    <result column="RANGE" jdbcType="NUMERIC" property="range" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    UUID, NAME, TYPE, CLASS_A, CLASS_B, CALC_TYPE, NATURE, SIGNIFICANCE, IMPROVE, NK_FROM, 
+    MODIFIER, UPDATETIME, ISAVAILABLE, THRESHOLD_HOSPITAL, THRESHOLD_COUNTRY, INDICATOR_ORDER, 
+    INDICATORS_GUIDE, NK_LEVEL, DATASOURCE, EDITABLE, FORMULA, RANGE
+  </sql>
+  <select id="selectByExample" parameterType="com.example.demo.model.oracle.NkParameterBeanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from BI_PORTAL.NK_PARAMETER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BI_PORTAL.NK_PARAMETER
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from BI_PORTAL.NK_PARAMETER
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo.model.oracle.NkParameterBeanExample">
+    delete from BI_PORTAL.NK_PARAMETER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.oracle.NkParameterBean">
+    insert into BI_PORTAL.NK_PARAMETER (UUID, NAME, TYPE, 
+      CLASS_A, CLASS_B, CALC_TYPE, 
+      NATURE, SIGNIFICANCE, IMPROVE, 
+      NK_FROM, MODIFIER, UPDATETIME, 
+      ISAVAILABLE, THRESHOLD_HOSPITAL, THRESHOLD_COUNTRY, 
+      INDICATOR_ORDER, INDICATORS_GUIDE, NK_LEVEL, 
+      DATASOURCE, EDITABLE, FORMULA, 
+      RANGE)
+    values (#{uuid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{classA,jdbcType=VARCHAR}, #{classB,jdbcType=VARCHAR}, #{calcType,jdbcType=VARCHAR}, 
+      #{nature,jdbcType=VARCHAR}, #{significance,jdbcType=VARCHAR}, #{improve,jdbcType=VARCHAR}, 
+      #{nkFrom,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{isavailable,jdbcType=NUMERIC}, #{thresholdHospital,jdbcType=NUMERIC}, #{thresholdCountry,jdbcType=NUMERIC}, 
+      #{indicatorOrder,jdbcType=NUMERIC}, #{indicatorsGuide,jdbcType=NUMERIC}, #{nkLevel,jdbcType=NUMERIC}, 
+      #{datasource,jdbcType=NUMERIC}, #{editable,jdbcType=NUMERIC}, #{formula,jdbcType=VARCHAR}, 
+      #{range,jdbcType=NUMERIC})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.oracle.NkParameterBean">
+    insert into BI_PORTAL.NK_PARAMETER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="classA != null">
+        CLASS_A,
+      </if>
+      <if test="classB != null">
+        CLASS_B,
+      </if>
+      <if test="calcType != null">
+        CALC_TYPE,
+      </if>
+      <if test="nature != null">
+        NATURE,
+      </if>
+      <if test="significance != null">
+        SIGNIFICANCE,
+      </if>
+      <if test="improve != null">
+        IMPROVE,
+      </if>
+      <if test="nkFrom != null">
+        NK_FROM,
+      </if>
+      <if test="modifier != null">
+        MODIFIER,
+      </if>
+      <if test="updatetime != null">
+        UPDATETIME,
+      </if>
+      <if test="isavailable != null">
+        ISAVAILABLE,
+      </if>
+      <if test="thresholdHospital != null">
+        THRESHOLD_HOSPITAL,
+      </if>
+      <if test="thresholdCountry != null">
+        THRESHOLD_COUNTRY,
+      </if>
+      <if test="indicatorOrder != null">
+        INDICATOR_ORDER,
+      </if>
+      <if test="indicatorsGuide != null">
+        INDICATORS_GUIDE,
+      </if>
+      <if test="nkLevel != null">
+        NK_LEVEL,
+      </if>
+      <if test="datasource != null">
+        DATASOURCE,
+      </if>
+      <if test="editable != null">
+        EDITABLE,
+      </if>
+      <if test="formula != null">
+        FORMULA,
+      </if>
+      <if test="range != null">
+        RANGE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="classA != null">
+        #{classA,jdbcType=VARCHAR},
+      </if>
+      <if test="classB != null">
+        #{classB,jdbcType=VARCHAR},
+      </if>
+      <if test="calcType != null">
+        #{calcType,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null">
+        #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="significance != null">
+        #{significance,jdbcType=VARCHAR},
+      </if>
+      <if test="improve != null">
+        #{improve,jdbcType=VARCHAR},
+      </if>
+      <if test="nkFrom != null">
+        #{nkFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isavailable != null">
+        #{isavailable,jdbcType=NUMERIC},
+      </if>
+      <if test="thresholdHospital != null">
+        #{thresholdHospital,jdbcType=NUMERIC},
+      </if>
+      <if test="thresholdCountry != null">
+        #{thresholdCountry,jdbcType=NUMERIC},
+      </if>
+      <if test="indicatorOrder != null">
+        #{indicatorOrder,jdbcType=NUMERIC},
+      </if>
+      <if test="indicatorsGuide != null">
+        #{indicatorsGuide,jdbcType=NUMERIC},
+      </if>
+      <if test="nkLevel != null">
+        #{nkLevel,jdbcType=NUMERIC},
+      </if>
+      <if test="datasource != null">
+        #{datasource,jdbcType=NUMERIC},
+      </if>
+      <if test="editable != null">
+        #{editable,jdbcType=NUMERIC},
+      </if>
+      <if test="formula != null">
+        #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="range != null">
+        #{range,jdbcType=NUMERIC},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo.model.oracle.NkParameterBeanExample" resultType="java.lang.Long">
+    select count(*) from BI_PORTAL.NK_PARAMETER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update BI_PORTAL.NK_PARAMETER
+    <set>
+      <if test="record.uuid != null">
+        UUID = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classA != null">
+        CLASS_A = #{record.classA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classB != null">
+        CLASS_B = #{record.classB,jdbcType=VARCHAR},
+      </if>
+      <if test="record.calcType != null">
+        CALC_TYPE = #{record.calcType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nature != null">
+        NATURE = #{record.nature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.significance != null">
+        SIGNIFICANCE = #{record.significance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.improve != null">
+        IMPROVE = #{record.improve,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nkFrom != null">
+        NK_FROM = #{record.nkFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        MODIFIER = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null">
+        UPDATETIME = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isavailable != null">
+        ISAVAILABLE = #{record.isavailable,jdbcType=NUMERIC},
+      </if>
+      <if test="record.thresholdHospital != null">
+        THRESHOLD_HOSPITAL = #{record.thresholdHospital,jdbcType=NUMERIC},
+      </if>
+      <if test="record.thresholdCountry != null">
+        THRESHOLD_COUNTRY = #{record.thresholdCountry,jdbcType=NUMERIC},
+      </if>
+      <if test="record.indicatorOrder != null">
+        INDICATOR_ORDER = #{record.indicatorOrder,jdbcType=NUMERIC},
+      </if>
+      <if test="record.indicatorsGuide != null">
+        INDICATORS_GUIDE = #{record.indicatorsGuide,jdbcType=NUMERIC},
+      </if>
+      <if test="record.nkLevel != null">
+        NK_LEVEL = #{record.nkLevel,jdbcType=NUMERIC},
+      </if>
+      <if test="record.datasource != null">
+        DATASOURCE = #{record.datasource,jdbcType=NUMERIC},
+      </if>
+      <if test="record.editable != null">
+        EDITABLE = #{record.editable,jdbcType=NUMERIC},
+      </if>
+      <if test="record.formula != null">
+        FORMULA = #{record.formula,jdbcType=VARCHAR},
+      </if>
+      <if test="record.range != null">
+        RANGE = #{record.range,jdbcType=NUMERIC},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update BI_PORTAL.NK_PARAMETER
+    set UUID = #{record.uuid,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      CLASS_A = #{record.classA,jdbcType=VARCHAR},
+      CLASS_B = #{record.classB,jdbcType=VARCHAR},
+      CALC_TYPE = #{record.calcType,jdbcType=VARCHAR},
+      NATURE = #{record.nature,jdbcType=VARCHAR},
+      SIGNIFICANCE = #{record.significance,jdbcType=VARCHAR},
+      IMPROVE = #{record.improve,jdbcType=VARCHAR},
+      NK_FROM = #{record.nkFrom,jdbcType=VARCHAR},
+      MODIFIER = #{record.modifier,jdbcType=VARCHAR},
+      UPDATETIME = #{record.updatetime,jdbcType=TIMESTAMP},
+      ISAVAILABLE = #{record.isavailable,jdbcType=NUMERIC},
+      THRESHOLD_HOSPITAL = #{record.thresholdHospital,jdbcType=NUMERIC},
+      THRESHOLD_COUNTRY = #{record.thresholdCountry,jdbcType=NUMERIC},
+      INDICATOR_ORDER = #{record.indicatorOrder,jdbcType=NUMERIC},
+      INDICATORS_GUIDE = #{record.indicatorsGuide,jdbcType=NUMERIC},
+      NK_LEVEL = #{record.nkLevel,jdbcType=NUMERIC},
+      DATASOURCE = #{record.datasource,jdbcType=NUMERIC},
+      EDITABLE = #{record.editable,jdbcType=NUMERIC},
+      FORMULA = #{record.formula,jdbcType=VARCHAR},
+      RANGE = #{record.range,jdbcType=NUMERIC}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.oracle.NkParameterBean">
+    update BI_PORTAL.NK_PARAMETER
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="classA != null">
+        CLASS_A = #{classA,jdbcType=VARCHAR},
+      </if>
+      <if test="classB != null">
+        CLASS_B = #{classB,jdbcType=VARCHAR},
+      </if>
+      <if test="calcType != null">
+        CALC_TYPE = #{calcType,jdbcType=VARCHAR},
+      </if>
+      <if test="nature != null">
+        NATURE = #{nature,jdbcType=VARCHAR},
+      </if>
+      <if test="significance != null">
+        SIGNIFICANCE = #{significance,jdbcType=VARCHAR},
+      </if>
+      <if test="improve != null">
+        IMPROVE = #{improve,jdbcType=VARCHAR},
+      </if>
+      <if test="nkFrom != null">
+        NK_FROM = #{nkFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isavailable != null">
+        ISAVAILABLE = #{isavailable,jdbcType=NUMERIC},
+      </if>
+      <if test="thresholdHospital != null">
+        THRESHOLD_HOSPITAL = #{thresholdHospital,jdbcType=NUMERIC},
+      </if>
+      <if test="thresholdCountry != null">
+        THRESHOLD_COUNTRY = #{thresholdCountry,jdbcType=NUMERIC},
+      </if>
+      <if test="indicatorOrder != null">
+        INDICATOR_ORDER = #{indicatorOrder,jdbcType=NUMERIC},
+      </if>
+      <if test="indicatorsGuide != null">
+        INDICATORS_GUIDE = #{indicatorsGuide,jdbcType=NUMERIC},
+      </if>
+      <if test="nkLevel != null">
+        NK_LEVEL = #{nkLevel,jdbcType=NUMERIC},
+      </if>
+      <if test="datasource != null">
+        DATASOURCE = #{datasource,jdbcType=NUMERIC},
+      </if>
+      <if test="editable != null">
+        EDITABLE = #{editable,jdbcType=NUMERIC},
+      </if>
+      <if test="formula != null">
+        FORMULA = #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="range != null">
+        RANGE = #{range,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.oracle.NkParameterBean">
+    update BI_PORTAL.NK_PARAMETER
+    set NAME = #{name,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      CLASS_A = #{classA,jdbcType=VARCHAR},
+      CLASS_B = #{classB,jdbcType=VARCHAR},
+      CALC_TYPE = #{calcType,jdbcType=VARCHAR},
+      NATURE = #{nature,jdbcType=VARCHAR},
+      SIGNIFICANCE = #{significance,jdbcType=VARCHAR},
+      IMPROVE = #{improve,jdbcType=VARCHAR},
+      NK_FROM = #{nkFrom,jdbcType=VARCHAR},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      ISAVAILABLE = #{isavailable,jdbcType=NUMERIC},
+      THRESHOLD_HOSPITAL = #{thresholdHospital,jdbcType=NUMERIC},
+      THRESHOLD_COUNTRY = #{thresholdCountry,jdbcType=NUMERIC},
+      INDICATOR_ORDER = #{indicatorOrder,jdbcType=NUMERIC},
+      INDICATORS_GUIDE = #{indicatorsGuide,jdbcType=NUMERIC},
+      NK_LEVEL = #{nkLevel,jdbcType=NUMERIC},
+      DATASOURCE = #{datasource,jdbcType=NUMERIC},
+      EDITABLE = #{editable,jdbcType=NUMERIC},
+      FORMULA = #{formula,jdbcType=VARCHAR},
+      RANGE = #{range,jdbcType=NUMERIC}
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+</mapper>
